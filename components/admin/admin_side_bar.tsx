@@ -1,11 +1,15 @@
 'use client';
-import { Stack, Box, IconButton, Tooltip, Avatar } from '@mui/material';
+import { Stack, Box, IconButton, Tooltip, Avatar, Button } from '@mui/material';
 import { Home, Assignment, Report, Build } from '@mui/icons-material';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useWindowSize } from '@/context/window_size';
+import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
+import { FaPowerOff } from 'react-icons/fa';
+import Person2Icon from '@mui/icons-material/Person2';
 
-const Sidebar = () => {
+const AdminSidebar = () => {
   const menuItems = [
     { label: 'Home', icon: <Home /> },
     { label: 'Service Records', icon: <Assignment /> },
@@ -15,7 +19,8 @@ const Sidebar = () => {
   ];
 
   const [activeIndex, setActiveIndex] = useState<number>(1); // default active
-  const { isMobile, isTablet, isDesktop } = useWindowSize();
+  const { isMobile } = useWindowSize();
+  const router = useRouter();
 
   return (
     <Stack
@@ -28,11 +33,20 @@ const Sidebar = () => {
         alignItems: 'center',
         pt: 2,
         gap: 3,
+        position: 'fixed',
+        left: 0,
+        top: 0,
       }}
     >
       {/* Logo */}
       <Box  mb={2}>
-        <Image src="/light_logo.png" width={60} height={60} alt="Logo" />
+        <Image 
+          src="/light_logo.png"
+           width={60}
+            height={60}
+             alt="Logo"
+             onClick={() => router.push('/')}
+              />
       </Box>
 
       {/* Menu Items */}
@@ -77,11 +91,17 @@ const Sidebar = () => {
 
       {/* Spacer + Avatar */}
       <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ width: 40, height: 40, mb: 2 }}>
-      <Avatar/>
-      </Box>
+        <Person2Icon/>
+        <Button sx={{mb:3}} >
+          <FaPowerOff
+           style={{ color: 'red', cursor: 'pointer', scale:1.5 }}
+           onClick={() => {
+             signOut()
+           }}
+          />
+        </Button>
     </Stack>
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;

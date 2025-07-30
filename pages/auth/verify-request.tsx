@@ -1,8 +1,11 @@
 'use client';
-import { Box, Typography, Stack } from '@mui/material';
+import { useWindowSize } from '@/context/window_size';
+import { Box, Typography, Stack, Button } from '@mui/material';
+
 ;
 
 export default function VerifyRequestPage() {
+  const { isMobile} = useWindowSize();
   return (
     <Stack
       direction="column"
@@ -17,6 +20,9 @@ export default function VerifyRequestPage() {
       <Typography variant="body1" color="text.secondary">
         קישור הכניסה נשלח לכתובת המייל שלך. לחץ עליו כדי להתחבר.
       </Typography>
+    <Typography variant={isMobile ? 'h5' : 'h4'} >
+      אפשר לסגור את החלון 
+    </Typography>
     </Stack>
   );
 }

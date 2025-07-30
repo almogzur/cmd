@@ -1,34 +1,47 @@
-'use client'
+'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
-  CssBaseline,
   Typography,
   Stack,
   Paper,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import Image from 'next/image';
 import { styled } from '@mui/material/styles';
 import Logo from '@/public/dark_logo.png';
 import InputWrap from '@/components/mui-wrappers/input-wrap';
 import { signIn } from "next-auth/react";
+import { useWindowSize } from '@/context/window_size';
+import { IoMdClose } from "react-icons/io";
+import { useRouter } from 'next/router';
 
-const CenteredPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
-  maxWidth: 400,
-  backgroundColor: '#f4f6f8',
-  borderRadius: 16,
+const FullscreenCenter = styled(Box)({
+  minHeight: '100vh',
+  background: 'linear-gradient(to bottom right, #0f1c2e, #1a2a44)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '1rem',
+});
+
+const StyledCard = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(6),
+  borderRadius: 24,
+  backgroundColor: '#fdfaf6',
   direction: 'rtl',
+  width: '100%',
+  maxWidth: 650,
+  textAlign: 'center',
+  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
 }));
 
-const SignIn = () => {
-  const [user, setUser] = React.useState({
+const SignInPage = () => {
+  const { isMobile } = useWindowSize();
+  const router = useRouter();
+
+  const [user, setUser] = useState({
     email: '',
     role: 'USER',
   });
@@ -41,73 +54,69 @@ const SignIn = () => {
   };
 
   return (
-    <>
-      <CssBaseline />
-      <Box
-        minHeight="100vh"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        bgcolor="#e9ebee"
-        px={2}
-      >
-        <CenteredPaper elevation={6}>
-          <Stack spacing={3} alignItems="center" textAlign="center">
-            <Image
-              src={Logo}
-              alt="לוגו Check My Desk"
-              width={80}
-              height={80}
-              style={{ filter: 'drop-shadow(0 0 4px #007aff)' }}
-            />
+    <FullscreenCenter dir="rtl">
+      <StyledCard elevation={12} sx={{ position: 'relative' }}>
+        <IoMdClose
+          style={{
+            position: 'absolute',
+            top: 20,
+            left: 20,
+            cursor: 'pointer',
+            scale: 2,
+          }}
+          onClick={() => { router.push('/') }}
+        />
 
-            <Typography variant="h5" fontWeight="bold">
-              התחברות ל־Check My Desk
-            </Typography>
+        <Stack spacing={isMobile ? 3 : 5} alignItems="center">
+          <Image
+            src={Logo}
+            alt="לוגו Check My Desk"
+            width={isMobile ? 80 : 100}
+            height={isMobile ? 80 : 100}
+            style={{ filter: 'drop-shadow(0 0 6px #007aff)' }}
+          />
 
-            <InputWrap
-              label="מייל"
-              value={user.email}
-              onChangeHandler={(e) =>
-                setUser({ ...user, email: e.target.value })
-              }
-              helpText={undefined}
-              variant="outlined"
-              fullWidth
-              isLabelBold
-              type="email"
-              required
-            />
+          <Typography variant={isMobile ? 'h5' : 'h4'} fontWeight="bold">
+            התחברות ל־Check My Desk
+          </Typography>
 
-            <FormControl fullWidth>
-              <InputLabel id="role-label">בחר תפקיד</InputLabel>
-              <Select
-                labelId="role-label"
-                value={user.role}
-                label="בחר תפקיד"
-                onChange={(e) =>
-                  setUser({ ...user, role: e.target.value })
-                }
+          <Typography
+            variant={isMobile ? 'body2' : 'body1'}
+            color="text.secondary"
+            fontWeight="bold"
+            sx={{ px: isMobile ? 1 : 4 }}
+          >
+            הזינו את כתובת האימייל שלכם ואנו נשלח לכם קישור התחברות .
+          </Typography>
+
+          <Box sx={{ width: '100%', mt: 2 }}>
+            <Stack spacing={2}>
+              <InputWrap
+                label="אימייל"
+                variant="standard"
+                fullWidth
+                type="email"
+                value={user.email}
+                onChangeHandler={(e) => setUser({ ...user, email: e.target.value })}
+                required
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size={isMobile ? 'medium' : 'large'}
+                fullWidth={isMobile}
+                onClick={handleSignIn}
               >
-                <MenuItem value="USER">משתמש </MenuItem>
-                <MenuItem value="ADMIN">מנהל</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Button
-              sx={{ mt: 2 }}
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={handleSignIn}
-            >
-              התחבר
-            </Button>
-          </Stack>
-        </CenteredPaper>
-      </Box>
-    </>
+                שלח קישור התחברות
+              </Button>
+            </Stack>
+          </Box>
+        </Stack>
+      </StyledCard>
+    </FullscreenCenter>
   );
 };
 
-export default SignIn;
+export default SignInPage;

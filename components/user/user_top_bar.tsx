@@ -5,9 +5,14 @@ import { AppBar, Toolbar, Typography, Button, Stack } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import NewCallDialog from './new_call_dialog';
-import {signIn} from 'next-auth/react'
+import { useRouter } from 'next/router';
+import { FaPowerOff } from "react-icons/fa";
+import { signOut } from 'next-auth/react';
 
 const UserTopNavbar: React.FC = () => {
+
+  const router = useRouter();
+
   return (
     <AppBar
       position="static"
@@ -36,22 +41,35 @@ const UserTopNavbar: React.FC = () => {
           רשומות השירות הפעילות שלי
         </Typography>
 
-        <Stack direction="row" spacing={2}>
+        <Stack 
+          direction="row"
+           spacing={2}
+           alignItems={'center'}
+           >
           
         <NewCallDialog/>
 
-          <Button sx={{ color: '#fff', fontWeight: 500 }}>
-
-          </Button>
-
           <Button
-             sx={{ color: '#fff', fontWeight: 500 }}
-             onClick={() => {
-               signIn()
-             }}
-             >
-            התחברות אדמין  
+           sx={{ color: '#fff', fontWeight: 500 }}
+           variant='contained'
+           onClick={() => {
+            router.push('/user/main');
+           }}
+           >
+            הקריאות  שלי 
           </Button>
+
+         <Button
+         
+         >
+          <FaPowerOff
+           style={{ color: 'red', cursor: 'pointer' }}
+           onClick={() => {
+             signOut()
+           }}
+          />
+          </Button>
+
 
         </Stack>
       </Toolbar>

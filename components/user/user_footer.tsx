@@ -5,7 +5,7 @@ import { Box, Typography, Link, Stack, IconButton, useTheme, colors } from '@mui
 import { FaFacebookF } from 'react-icons/fa';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
-const Footer: React.FC = () => {
+const UserFooter: React.FC = () => {
 
   const theme = useTheme();
   return (
@@ -26,11 +26,15 @@ const Footer: React.FC = () => {
     >
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
-        justifyContent="space-between"
+        justifyContent="space-around"
         alignItems="center"
         spacing={{ xs: 1, sm: 0 ,}}
       >
-        <Typography variant="body2"  sx={{color:'#fff'}}>
+        <Typography 
+           variant="body2"
+            sx={{color:'#fff', }}
+
+            >
           &copy; {new Date().getFullYear()} Check My Desk  (MIGO)- כל הזכויות שמורות
         </Typography>
 
@@ -66,4 +70,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default UserFooter;

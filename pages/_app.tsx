@@ -2,7 +2,7 @@ import { SessionProvider } from "next-auth/react"
 import { AppProps } from "next/app"
 import { WindowSizeProvider } from "@/context/window_size"
 import { createTheme , ThemeProvider} from "@mui/material"
-
+import "@/styles/globals.css"
 
 const theme = createTheme({
   palette: {

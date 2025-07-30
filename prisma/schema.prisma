@@ -1,34 +1,37 @@
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
-
+  url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
   emailVerified DateTime?
   image         String?
+  phone          String?         @unique
   accounts      Account[]
   sessions      Session[]
+  
   Authenticator Authenticator[] // Optional for WebAuthn support
 
-  role          Role            @default(USER) 
+  role Role @default(USER)
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  calls     ServiceCalls[] @relation("UserCalls")
+
 }
 
 enum Role {
   USER
   ADMIN
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -41,33 +44,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -78,8 +81,76 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
+}
+
+enum ServiceCallStatus {
+  NEW
+  PENDING
+  IN_PROGRESS
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model ServiceCalls {
+  id           Int               @id @default(autoincrement())
+  title        String
+  description  String
+  customerName String
+  location     String
+  status       ServiceCallStatus @default(NEW)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime?         @updatedAt
+  priority     Priority
+  attachments  String[]
+
+  assignTechnicianName String  @default("")
+  technicianNote       String  @default("")
+
+  //  Declare userId before using it in the relation
+  userId String
+  user   User   @relation("UserCalls", fields: [userId], references: [id])
+
+  //  Declare sn before using it in the relation
+  sn     Int?
+  asset  Asset?  @relation(fields: [sn], references: [sn])
+}
+
+
+
+model Asset {
+  sn             Int             @id // Serial number is now manually assigned
+  model          String
+  manufacturer   String
+  category       String
+  serialNumber   String          @unique
+  purchaseDate   DateTime?
+  warrantyUntil  DateTime?
+  location       String?
+  status         AssetStatus     @default(ACTIVE)
+  notes          String?
+
+  //  Back relation to ServiceCalls
+  serviceCalls   ServiceCalls[]
+  
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+
+}
+
+enum AssetStatus {
+  ACTIVE
+  IN_REPAIR
+  RETIRED
+  LOST
 }
