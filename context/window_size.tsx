@@ -4,8 +4,6 @@ import { useMediaQuery, useTheme } from '@mui/material';
 
 interface WindowSizeContextProps {
   isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
 }
 
 const WindowSizeContext = createContext<WindowSizeContextProps | undefined>(undefined);
@@ -13,12 +11,10 @@ const WindowSizeContext = createContext<WindowSizeContextProps | undefined>(unde
 export const WindowSizeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useTheme();
   
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.between('xs', 500));
 
   return (
-    <WindowSizeContext.Provider value={{ isMobile, isTablet, isDesktop }}>
+    <WindowSizeContext.Provider value={{isMobile}}>
       {children}
     </WindowSizeContext.Provider>
   );

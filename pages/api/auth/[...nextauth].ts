@@ -1,24 +1,26 @@
 import NextAuth, { AuthOptions, DefaultSession, DefaultUser } from "next-auth";
-import EmailProvider, { SendVerificationRequestParams } from "next-auth/providers/email";
+import EmailProvider, { } from "next-auth/providers/email";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/prisma/prisma";
+import { prisma } from "../../../prisma/prisma";
 import { Adapter } from "next-auth/adapters";
-import { createTransport } from "nodemailer";
 
 // === Type Augmentation ===
-type Role = "USER" | "ADMIN";
+type Role = "USER" | "ADMIN" | "TECHNICIAN";
 
 declare module "next-auth" {
   interface Session {
     user: {
       id: string;
       role: Role;
+      phone: string;
+
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     role: Role;
     id: string;
+    phone: string;
   }
 }
 
@@ -26,6 +28,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role: Role;
+    phone: string;
   }
 }
 
@@ -78,6 +81,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.phone = user.phone
       }
       return token;
     },
@@ -86,6 +90,7 @@ export const authOptions: AuthOptions = {
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.role = token.role;
+      session.user.phone = token.phone
       return session;
     },
 

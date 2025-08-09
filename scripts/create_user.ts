@@ -1,4 +1,4 @@
-import { prisma } from '@/prisma/prisma' // adjust path if needed
+import { prisma } from '../prisma/prisma' // adjust path if needed
 
 async function CreateUser() {
   const email = process.argv[2];

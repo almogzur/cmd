@@ -7,10 +7,15 @@ import { prisma } from "@/prisma/prisma";
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
+const phoneRegex = new RegExp(
+  /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+);
+
 const createUserSchema = z.object({
   email: z.email(),
-  name: z.string(),
-  phone:z.string().optional(),
+  name: z.string().min(3).max(30),
+  phone:z.string().regex(phoneRegex,"Invalid phone number"),
+  role: z.enum(['USER', 'TECHNICIAN'])
 });
 
 export default async function handler  ( req: NextApiRequest , res: NextApiResponse ):Promise<void>{
@@ -30,9 +35,11 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
     console.log(parseResult.error.issues )
     return res.status(400).json({ message: 'Invalid request body' });
    }
-   
+  
+  
       const email = parseResult.data.email
       const name = parseResult.data.name
+      const role = parseResult.data.role
 
 
      try {
@@ -46,7 +53,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
       data: {
         email,
         name,
-        role: 'USER', // if you use roles
+        role: role // if you use roles
       },
     });
 

@@ -19,7 +19,7 @@ model User {
   
   Authenticator Authenticator[] // Optional for WebAuthn support
 
-  role Role @default(USER)
+  role Role 
 
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
@@ -30,6 +30,7 @@ model User {
 enum Role {
   USER
   ADMIN
+  TECHNICIAN
 }
 
 model Account {
@@ -71,7 +72,7 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
+
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -101,9 +102,9 @@ enum Priority {
   CRITICAL
 }
 
-model ServiceCalls {
-  id           Int               @id @default(autoincrement())
-  title        String
+
+model ServiceCalls {    
+  id        String         @id
   description  String
   customerName String
   location     String
@@ -113,20 +114,21 @@ model ServiceCalls {
   priority     Priority
   attachments  String[]
 
-  assignTechnicianName String  @default("")
-  technicianNote       String  @default("")
 
   //  Declare userId before using it in the relation
   userId String
   user   User   @relation("UserCalls", fields: [userId], references: [id])
 
   //  Declare sn before using it in the relation
-  sn     Int?
-  asset  Asset?  @relation(fields: [sn], references: [sn])
+  assetSn     Int?
+  asset  Asset?  @relation(fields: [assetSn], references: [sn])
+
+  // Technician relation 
+  technicianId   Int?
+  technicianNote String            @default("")
+  technician     Technician?       @relation("TechnicianToCalls", fields: [technicianId], references: [id])
+
 }
-
-
-
 model Asset {
   sn             Int             @id // Serial number is now manually assigned
   model          String
@@ -144,8 +146,6 @@ model Asset {
   
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-
-
 }
 
 enum AssetStatus {
@@ -153,4 +153,12 @@ enum AssetStatus {
   IN_REPAIR
   RETIRED
   LOST
+}
+
+model Technician {
+  id            Int             @id @default(autoincrement())
+  name          String 
+  email         String
+
+  serviceCalls  ServiceCalls[]  @relation("TechnicianToCalls")
 }
