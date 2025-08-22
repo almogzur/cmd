@@ -40,7 +40,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
       const email = parseResult.data.email
       const name = parseResult.data.name
       const role = parseResult.data.role
-
+      const phone = parseResult.data.phone
 
      try {
         const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -53,6 +53,7 @@ export default async function handler  ( req: NextApiRequest , res: NextApiRespo
       data: {
         email,
         name,
+        phone,
         role: role // if you use roles
       },
     });

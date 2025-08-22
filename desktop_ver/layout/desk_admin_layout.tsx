@@ -4,9 +4,10 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box"
 import AdminDeskTopNavbar from "./layout_components/admin/desk_admin_top_bar"
 import { useThemeContext } from "@/context/theme_context";
+import { Container } from "@mui/material";
 
 
-const  DesktoAdminLayout = ({ children }: { children?: React.ReactNode }) => {
+const  DesktopAdminLayout = ({ children }: { children?: React.ReactNode }) => {
 
       const router = useRouter();
       const { data: session, status } = useSession();
@@ -21,12 +22,14 @@ const  DesktoAdminLayout = ({ children }: { children?: React.ReactNode }) => {
       }, [session, status, router]);
       
     return (
-        <Box sx={{  minHeight: '100vh' , bgcolor: bgColor}} >
+        <Box sx={{  minHeight: '100vh' , bgcolor: bgColor }} >
+          <Container maxWidth="xl">
             <AdminDeskTopNavbar/>
             {children}
+            </Container>
 
         </Box>
     )
 }
 
-export default DesktoAdminLayout
+export default DesktopAdminLayout

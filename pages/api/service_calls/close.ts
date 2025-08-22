@@ -5,7 +5,7 @@ import { prisma } from '@/prisma/prisma';
 import { z } from 'zod';
 
 const CloseCallSchema = z.object({
-  id: z.string(),
+  id: z.string().min(1),
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -14,8 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const session = await getServerSession(req, res, authOptions);
-
-  if (!session) {
+  if (!session?.user?.id) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -29,7 +28,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const updatedCall = await prisma.serviceCalls.update({
       where: { id },
-      data: { status: 'DONE' }, 
+      data: {
+        status: 'DONE',
+        closerId: session.user.id,   
+        closerName: session.user.name,
+      },
     });
 
     return res.status(200).json({ success: true, call: updatedCall });

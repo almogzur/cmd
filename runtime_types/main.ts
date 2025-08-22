@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 export const newCallSchema = z.object({
@@ -10,20 +11,27 @@ export const newCallSchema = z.object({
 });
 
 
-export type ServiceCallStatus = 'new' | 'open' | 'pending' | 'closed' | 'resolved';
 
-export interface ServiceCall {
-  id: number;
-  title: string;
-  description: string;
-  customerName: string;
-  location: string;
-  status: ServiceCallStatus;
-  createdAt: string; // ISO date string
-  updatedAt?: string; // ISO date string
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  attachments?: string[]; // list of file URLs
-  userId: string;
+export const TechnicianNoteSchema = z.object({
+  id: z.string(),
+  authorId: z.string(),
+  authorName: z.string(),
+  text: z.string(),
+  createdAt: z.string(),
+});
+
+
+export function parseTechnicianNotes(
+  json: Prisma.JsonValue | null | undefined
+): TechnicianNote[] {
+  if (!json) return [];
+  const parsed = TechnicianNotesSchema.safeParse(json);
+  return parsed.success ? parsed.data : [];
 }
+
+
+
+export type TechnicianNote = z.infer<typeof TechnicianNoteSchema>;
+export const TechnicianNotesSchema = z.array(TechnicianNoteSchema);
 
 export type NewCallData = z.infer<typeof newCallSchema>;

@@ -7,12 +7,13 @@ import "@/styles/globals.css"
 
 import { WindowSizeProvider } from "@/context/window_size"
 
-import { MobileAdminComponentProvider } from "@/context/mobile_admin_selected_component_provider"
-import { AdminDataGridOptionsProvider } from "@/context/admin_data_grid_options"
-import { UserDataGridOptionsProvider } from "@/context/user_data_grid_options"
+import { MobileAdminComponentProvider } from "@/context/mobile_admin_selected_component"
+
 import { heIL } from "@mui/material/locale"
 import { ThemeContextProvider } from "@/context/theme_context"
-
+import { DesktopAdminComponentProvider } from "@/context/desktop_admin_selected_component";
+import {DesktopAdminSelectedCallProvider} from "@/context/desktop_admin_selected_call";
+import { DesktopTechComponentProvider } from "@/context/desktop_tech_selected_component";
 
 const theme = createTheme({
   direction: "rtl", // fix datagrid pinning
@@ -101,13 +102,19 @@ const MyApp = ({
       <SessionProvider session={session}>
         <WindowSizeProvider>
           <ThemeContextProvider>
+            
+            <DesktopAdminSelectedCallProvider>
+            <DesktopAdminComponentProvider>
+            <DesktopTechComponentProvider>
             <MobileAdminComponentProvider>
-              <AdminDataGridOptionsProvider>
-                <UserDataGridOptionsProvider>
+
                   <Component {...pageProps} />
-                </UserDataGridOptionsProvider>
-              </AdminDataGridOptionsProvider>
+
             </MobileAdminComponentProvider>
+            </DesktopTechComponentProvider>
+            </DesktopAdminComponentProvider>
+            </DesktopAdminSelectedCallProvider>
+        
           </ThemeContextProvider>
         </WindowSizeProvider>
       </SessionProvider>

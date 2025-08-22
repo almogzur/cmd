@@ -6,8 +6,8 @@ import MobileUserLayout from "@/mobile_ver/layouts/mob_user_layout";
 
 // Page markup
 
-import MobileUserMainPage from "@/mobile_ver/mob_pages_markup/user/main"
-import DesktopUserMainPage from "@/desktop_ver/desk_pages_markup/user/main"
+import MobileUserMainPage from "@/mobile_ver/mob_pages/user/main"
+import DesktopUserMainPage from "@/desktop_ver/desk_pages/user/main"
 
 
 import { useWindowSize } from "@/context/window_size";

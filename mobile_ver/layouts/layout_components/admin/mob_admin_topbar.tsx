@@ -16,13 +16,13 @@ import dynamic from 'next/dynamic';
 import MenuIcon from '@mui/icons-material/Menu';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { useThemeContext } from '@/context/theme_context';
-import AdminSelectPageMenu, { MenuItem } from '@/mobile_ver/mob_components/menus/mob_admin_select_page_menu';
+import AdminSelectPageMenu, { MenuItem } from '@/mobile_ver/components/menus/mob_admin_select_page_menu';
 
 
-const ProfilePage = dynamic(() => import('@/mobile_ver/mob_pages_markup/admin/profile'));
-const TechnicianPage = dynamic(() => import('@/mobile_ver/mob_pages_markup/admin/technician'));
-const ServiceRecordsPage = dynamic(() => import('@/mobile_ver/mob_pages_markup/admin/service_records'));
-const CallsTable = dynamic(() => import('@/mobile_ver/mob_pages_markup/admin/call_table'));
+const ProfilePage = dynamic(() => import('@/mobile_ver/mob_pages/admin/profile'));
+const TechnicianPage = dynamic(() => import('@/mobile_ver/mob_pages/admin/technician'));
+const ServiceRecordsPage = dynamic(() => import('@/mobile_ver/mob_pages/admin/service_records'));
+const CallsTable = dynamic(() => import('@/mobile_ver/mob_pages/admin/call_table'));
 
 const menuItems: MenuItem[] = [
   { label: 'Main', Icon: <Home />, Component: CallsTable },
@@ -34,37 +34,46 @@ const menuItems: MenuItem[] = [
 const MobilAdminTopBar = () => {
 
 
-  const { isDarkMode, toggleTheme, textColor } = useThemeContext()
+  const { isDarkMode, toggleTheme, textColor, bgColor } = useThemeContext()
 
 
   return (
     <Stack
       direction="row"
       alignItems="center"
-      sx={{ p: 1 }}
+      sx={{ p: 1,
+        position:'sticky',
+        top: 0,
+       
+        zIndex: 1000,
+        backgroundColor: bgColor,
+        borderBottom: '1px solid #e0e0e0',
+        
+       }}
     >
 
       < AdminSelectPageMenu
         items={menuItems}
-        Icon={<MenuIcon sx={{ color: textColor, scale: 1.5 }} />}
+        Icon={<MenuIcon sx={{ color: textColor, scale: 1.5 }} />
+      }
       />
 
       <ThemeSwitch
-        label={''}
         value={isDarkMode}
         onChangeHandler={() => { toggleTheme() }}
-        SwitchProps={{ color: 'info' }}
+        switchProps={{ color: 'info' }}
+        stackProps={{justifyContent:'end', width:"100%" }}
 
       />
 
       {/* logout button */}
-      <Button sx={{ mr: 'auto' }} >
+
 
         <PowerSettingsNewIcon
-          style={{ color: 'red', cursor: 'pointer', scale: 1.2 }}
+          style={{ color: 'red', cursor: 'pointer', scale: 1.1 , marginRight:10, marginLeft:10 }}
           onClick={() => signOut()}
         />
-      </Button>
+    
 
     </Stack>
   );

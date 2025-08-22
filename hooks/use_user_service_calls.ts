@@ -10,7 +10,7 @@ export function useUserServiceCalls(userId: string | null | undefined) {
   const shouldFetch = typeof userId === 'string';
 
   const { data, error, isLoading, mutate } = useSWR<ServiceCalls[]>(
-    shouldFetch ? `/api/service_calls/user/pull_by_user?userId=${userId}` : null,
+    shouldFetch ? `/api/user/service_calls/pull_by_user?userId=${userId}` : null,
     fetcher
   );
 

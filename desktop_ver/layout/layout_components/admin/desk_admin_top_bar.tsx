@@ -1,4 +1,4 @@
-import TabsComponent from "@/components/tabs"
+import TabsComponent from "@/components/admin_tabs"
 import Stack from "@mui/material/Stack"
 import Image from "next/image"
 import Link from "next/link"
@@ -9,21 +9,27 @@ import { useThemeContext } from "@/context/theme_context"
 
 export default function AdminDeskTopNavbar() {
 
-    const { isDarkMode, toggleTheme } = useThemeContext()
+    const { isDarkMode, toggleTheme , bgColor } = useThemeContext()
 
     return (
         <Stack
             direction="row"
             justifyContent={'space-between'}
             alignItems={'center'}
+            sx={{
+
+
+            }}
+
+            
         >
             <TabsComponent />
 
             <ThemeSwitch
-                label={''}
+ 
                 value={isDarkMode}
                 onChangeHandler={() => { toggleTheme() }}
-                SwitchProps={{ color: 'info' }}
+     
             />
 
             <Link href={'/'} >

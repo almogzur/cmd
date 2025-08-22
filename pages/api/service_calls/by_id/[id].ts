@@ -8,9 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { id } = req.query;
 
-const idSchema = z
-  .string()
-
+const idSchema = z .string()
 
 
   if (req.method !== 'GET') {

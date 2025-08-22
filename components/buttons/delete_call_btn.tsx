@@ -5,18 +5,22 @@ type DeleteCallButtonProps =    {
   callId: string;
   onDeleted?: () => void; // optional callback to refresh data or navigate
   btnProps?: ButtonProps
+    parentState? :{
+      value: boolean
+      setValue: React.Dispatch<React.SetStateAction<HTMLElement|null>>
+    }
 };
 
-const DeleteCallButton: React.FC<DeleteCallButtonProps> = ({ callId, onDeleted, btnProps }) => {
+const DeleteCallButton: React.FC<DeleteCallButtonProps> = ({ callId, onDeleted, btnProps , parentState }) => {
 
   const { status } = useSession();
   
 
-  const handleDelete = async () => {
-    if (status !== 'authenticated') return;
+  const delateCall = async () => {
 
-    const confirmed = window.confirm('Are you sure you want to delete this service call?');
-    if (!confirmed) return;
+     const confirmed = window.confirm('Are you sure you want to delete this service call?');
+    
+     if (!confirmed) return;
 
     try {
       const res = await fetch(`/api/service_calls/remove?id=${callId}`, {
@@ -31,11 +35,16 @@ const DeleteCallButton: React.FC<DeleteCallButtonProps> = ({ callId, onDeleted, 
       }
 
       alert('Service call deleted successfully');
-      onDeleted?.(); // trigger refresh or navigation if provided
     } catch (error) {
       console.error('Delete error:', error);
       alert('Error deleting service call');
     }
+    
+  }
+
+  const handleDelete = async () => {
+      delateCall()
+      parentState?.setValue(null)
   };
 
   return (

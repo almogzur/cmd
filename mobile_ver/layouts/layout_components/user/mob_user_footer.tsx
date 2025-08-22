@@ -11,10 +11,12 @@ import {
 } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { useThemeContext } from '@/context/theme_context';
 
 
 const UserFooter: React.FC = () => {
   const theme = useTheme();
+  const { bgColor , textColor}= useThemeContext()
 
   return (
     <Box
@@ -25,7 +27,7 @@ const UserFooter: React.FC = () => {
         left: 0,
         width: '100%',
         zIndex: 1000,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: bgColor,
         borderTop: '1px solid #e0e0e0',
         px: { xs: 2, sm: 4 },
         py: { xs: 1.5, sm: 2 },
@@ -38,6 +40,12 @@ const UserFooter: React.FC = () => {
         alignItems="center"
         spacing={ 1 }
         textAlign={ 'center'}
+        sx={{
+          '& .MuiTypography-root': {
+            color: textColor,
+          },
+        }}
+
       >
         <Typography
           variant="body2"
@@ -83,6 +91,7 @@ const UserFooter: React.FC = () => {
           </Link>
 
         </Stack>
+
       </Stack>
     </Box>
   );

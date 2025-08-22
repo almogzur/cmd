@@ -30,13 +30,13 @@ export const translatePriorityToHebrew = (priority: 'LOW' | 'MEDIUM' | 'HIGH' | 
 export const translateStatusToHebrew = (status: 'NEW' | 'IN_PROGRESS' | 'DONE' | "PENDING"): string => {
   switch (status) {
     case 'NEW':
-      return '(חדש)';
+      return 'חדש';
     case 'IN_PROGRESS':
-      return '(בתהליך)';
+      return 'בתהליך';
     case 'PENDING':
-      return '(בהמתנה)';
+      return 'בהמתנה';
     case 'DONE':
-      return '(סגור)';
+      return 'סגור';
     default:
       return status;
   }

@@ -1,19 +1,21 @@
 // components/UserNavbar.tsx
 'use client';
 import React from 'react';
-import { AppBar, Typography, Button, Stack } from '@mui/material';
+import { AppBar, Typography, Stack } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import { signOut } from 'next-auth/react';
 import NewCallDialog from '@/components/buttons/new_call_dialog';
 
 import Settings  from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { useThemeContext } from '@/context/theme_context';
+import ThemeSwitch from '@/components/theme_switch';
 
 const UserTopNavbar: React.FC = () => {
 
+  const {isDarkMode, toggleTheme , bgColor , textColor} = useThemeContext();
 
 
   return (
@@ -22,6 +24,8 @@ const UserTopNavbar: React.FC = () => {
         direction: 'rtl',
         position: 'inherit',
         width: '100%',
+        backgroundColor: bgColor,
+       
       }}
     >
 
@@ -42,7 +46,7 @@ const UserTopNavbar: React.FC = () => {
 
           <Link href={'/'}>
             <Image
-              src={'/light_logo.png'}
+              src={ isDarkMode ?  '/light_logo.png' : '/dark_logo.png' }
               width={60}
               height={60}
               alt={''}
@@ -51,7 +55,7 @@ const UserTopNavbar: React.FC = () => {
 
           <Typography
           variant='body2'
-            sx={{ flexGrow: 1, fontWeight: 600, color: '#fff' }}
+            sx={{ flexGrow: 1, fontWeight: 600, color: textColor }}
           >
             רשומות  פעילות
           </Typography>
@@ -66,6 +70,17 @@ const UserTopNavbar: React.FC = () => {
           p={2}
         >
 
+
+
+        <ThemeSwitch
+            value={isDarkMode}
+            onChangeHandler={() => { toggleTheme() }}
+            switchProps={{
+              size:  'small',
+               color:'info'
+            }}
+          />
+     
           <NewCallDialog
             btnProps={{
               size:  'small',
@@ -74,7 +89,7 @@ const UserTopNavbar: React.FC = () => {
 
           
           <Settings 
-            sx={{color:'white', scale: 1.5}}
+            sx={{color: textColor, scale: 1.5}}
             />
 
 

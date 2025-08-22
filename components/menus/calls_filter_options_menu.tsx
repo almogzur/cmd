@@ -4,49 +4,35 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
+
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
 import Menu, { MenuProps } from '@mui/material/Menu';
- import Button, { ButtonProps } from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import { useThemeContext } from '@/context/theme_context';
-import { Typography } from '@mui/material';
 
 
 
-type ListItem = {
-    label: string;
-    icon: React.ReactNode;
-}
 
 type NestedListProps = {
     Icon: React.ReactNode,
-    items?: ListItem[];
-    title?: string
     btnProps?: ButtonProps
     menuProps?: MenuProps
-
 }
 
-const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
-    items,
+const CallsFilterOptionsMenu: React.FC<NestedListProps> = ({
     btnProps,
-    Icon
+    Icon,
+    menuProps
 }) => {
 
 
-    const [open, setOpen] = React.useState(true);
-    
-    // const [collapse , setCollapse] = React.useState({
-    //     orderBy: false,
-    //     view: false
-    // });
-
-
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const {bgColor,textColor} = useThemeContext()
+    const { bgColor, textColor } = useThemeContext()
+
+    const [mode, setMode] = React.useState(false);
+    const [owner, setOwner] = React.useState(false);
 
     const menuOpen = Boolean(anchorEl);
 
@@ -58,8 +44,11 @@ const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
         setAnchorEl(null);
     };
 
-    const handleClick = () => {
-        setOpen(!open);
+    const handleClickMode = () => {
+        setMode(!mode);
+    };
+    const handleClickOwner = () => {
+        setOwner(!owner);
     };
     const handleSelect = (e: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(null);
@@ -70,9 +59,10 @@ const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
             <Button
                 onClick={handleOpenMenu}
                 size='small'
-                sx={{  textAlign:'center', borderRadius: 3 }}
+                sx={{ textAlign: 'center', borderRadius: 3 }}
+
                 {...btnProps}
-               
+
             >
                 {Icon}
             </Button>
@@ -92,8 +82,8 @@ const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
                     horizontal: 'right',
                 }}
                 slotProps={{
-                    paper:{
-                        sx:{ bgcolor:bgColor , color:textColor}
+                    paper: {
+                        sx: { bgcolor: bgColor, color: textColor }
 
                     }
                 }}
@@ -102,48 +92,28 @@ const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
                         color: 'inherit'
                     }
                 }}
-
+                {...menuProps}
             >
                 <List
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'start',
-                
+
                     }}
                     component="menu"
                     aria-labelledby="nested-list-subheader"
                 >
-                    <ListItemButton
-                        onClick={handleSelect}
-                        sx={{ gap: 2, width: '100%', textAlign: 'right' }}
-
-                    >
-                        <SendIcon />
-                        <Typography sx={{color:'inherit'}} >אחד שתיים</Typography>
-
-                    </ListItemButton>
-
-                    <ListItemButton
-                        sx={{ gap: 2, width: '100%', textAlign: 'right' }}
-                    >
-
-                        <DraftsIcon />
-                        
-                        <Typography>Drafts</Typography>
-
-                    </ListItemButton>
-
 
                     <ListItemButton
                         sx={{ gap: 2 }}
-                        onClick={handleClick}
+                        onClick={handleClickMode}
                     >
 
                         <InboxIcon />
 
-                        <ListItemText primary="סדר לפי" />
-                        {open
+                        <ListItemText primary="סדר לפי מצב קריאה" />
+                        {mode
                             ? <ExpandLess />
                             : <ExpandMore />
                         }
@@ -151,7 +121,7 @@ const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
 
                     <Collapse
                         unmountOnExit
-                        in={open}
+                        in={mode}
                         sx={{ width: '100%' }}
 
                     >
@@ -190,6 +160,65 @@ const CallsFilterOptionsMenu : React.FC<NestedListProps> = ({
                         </List>
 
                     </Collapse>
+                    
+                    <ListItemButton
+                        sx={{ gap: 2 }}
+                        onClick={handleClickOwner}
+                    >
+
+                        <InboxIcon />
+
+                        <ListItemText primary="הצג קריאות של" />
+                        {owner
+                            ? <ExpandLess />
+                            : <ExpandMore />
+                        }
+                    </ListItemButton>
+
+                    <Collapse
+                        unmountOnExit
+                        in={owner}
+                        sx={{ width: '100%' }}
+
+                    >
+                        <List
+                            component="div"
+                            disablePadding
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'start',
+                            }}
+
+                        >
+                            <ListItemButton
+                                sx={{ gap: 2, width: '100%', textAlign: 'right' }}
+
+                            >
+                                <StarBorder />
+                                <ListItemText primary="חדש" />
+
+
+
+                            </ListItemButton>
+
+                            <ListItemButton
+                                sx={{ gap: 2, width: '100%', textAlign: 'right' }}
+                            >
+
+                                <StarBorder />
+
+                                <ListItemText primary="משוייך" />
+
+
+                            </ListItemButton>
+                        </List>
+
+                    </Collapse>
+
+
+
 
 
                 </List>

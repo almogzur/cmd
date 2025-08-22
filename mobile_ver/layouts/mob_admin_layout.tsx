@@ -27,8 +27,9 @@ export default function MobilAdminLayout({ children }: { children?: React.ReactN
 
   return (
 
-        <Box sx={{  minHeight: '100vh' }}   bgcolor={ bgColor} >
+        <Box sx={{  minHeight: '100vh'  }}   bgcolor={ bgColor} >
           <MobilAdminTopbar/>
+          
           {children}
         
         </Box>

@@ -61,7 +61,7 @@ const NewUser = () => {
     email: '',
     name: '',
     phone: '',
-    rolle: 'USER'
+    role: 'USER'
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -73,7 +73,7 @@ const NewUser = () => {
       const res = await fetch('/api/user/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: userInfo.email, name: userInfo.name, phone: userInfo.phone , role: userInfo.rolle }),
+        body: JSON.stringify({ email: userInfo.email, name: userInfo.name, phone: userInfo.phone , role: userInfo.role }),
       });
 
       if (!res.ok) {
@@ -90,7 +90,7 @@ const NewUser = () => {
 
       if (result?.ok) {
         setSubmitted(true);
-        setUserInfo({ email: '', name: '', phone: '' , rolle: 'USER' });
+        setUserInfo({ email: '', name: '', phone: '' , role: 'USER' });
       } else {
         alert('שגיאה בשליחת הקישור, נסה שוב.');
       }

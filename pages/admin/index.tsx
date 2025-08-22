@@ -2,8 +2,8 @@
 import DesktopAdminLayout from "@/desktop_ver/layout/desk_admin_layout"
 import MobilAdminLayout from "@/mobile_ver/layouts/mob_admin_layout"
 
-import MobileAdminMainPage from "@/mobile_ver/mob_pages_markup/admin/main"
-import DesktopAdminMainPage from "@/desktop_ver/desk_pages_markup/admin/main"
+import MobileAdminMainPage from "@/mobile_ver/mob_pages/admin/main"
+import DesktopAdminMainPage from "@/desktop_ver/desk_pages/admin/main"
 
 import { useWindowSize } from "@/context/window_size";
 

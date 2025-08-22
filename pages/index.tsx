@@ -4,8 +4,8 @@ import { useWindowSize } from '@/context/window_size';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
-const MobileHome = dynamic(() => import('@/mobile_ver/mob_pages_markup/mob_main_page'));
-const DesktopHome = dynamic(() => import('@/desktop_ver/desk_pages_markup/desk_main_page'));
+const MobileHome = dynamic(() => import('@/mobile_ver/mob_pages/mob_main_page'));
+const DesktopHome = dynamic(() => import('@/desktop_ver/desk_pages/desk_main_page'));
 
 export default function Home() {
 

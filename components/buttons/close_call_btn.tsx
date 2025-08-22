@@ -3,23 +3,28 @@ import { Button, ButtonProps } from '@mui/material';
 
 type CloseCallButtonProps = {
   callId: string;
-  onClosed?: () => void;
   btnProps?: ButtonProps
+    parentState? :{
+      value: boolean
+      setValue: React.Dispatch<React.SetStateAction<HTMLElement|null>>
+    }
 
 };
 
-const CloseCallButton: React.FC<CloseCallButtonProps> = ({ callId, onClosed , btnProps }) => {
-  const handleClose = async () => {
-    const confirm = window.confirm('Are you sure you want to move this call to CLOSED?');
+const CloseCallButton: React.FC<CloseCallButtonProps> = ({ callId,  btnProps , parentState  }) => {
+  
+
+  const closeCall = async ()=>{
+      const confirm = window.confirm('Are you sure you want to move this call to CLOSED?');
     if (!confirm) return;
 
-    try {
+        try {
       const res = await fetch('/api/service_calls/close', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: callId }),
+        body: JSON.stringify({ id: callId  }),
       });
 
       const data = await res.json();
@@ -30,11 +35,20 @@ const CloseCallButton: React.FC<CloseCallButtonProps> = ({ callId, onClosed , bt
       }
 
       alert('Service call moved to CLOSED');
-      onClosed?.(); // refresh callback
+
+
     } catch (error) {
       console.error('Close call error:', error);
       alert('Error closing the service call');
     }
+
+  }
+
+  const handleClose = async () => {
+
+    await closeCall()
+    parentState?.setValue(null)
+
   };
 
   return (

@@ -11,7 +11,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonProps, DialogProps } from '@mui/material';
 import InputWrap from '@/components/inputs/input-wrap';
 import { useSession } from 'next-auth/react';
-import { useUserServiceCalls } from '@/hooks/use_user_service_calls';
 import SelectWrap from '@/components/inputs/select-wrap';
 import Typography from '@mui/material/Typography';
 import { v4 as uuidv4 } from 'uuid';
@@ -33,7 +32,6 @@ export default function NewCallDialog({ btnProps, dialogProps }: NewCallDialogPr
   const [currentStep, setCurrentStep] = useState(0);
   const [uid, setUid] = useState<string | null>(null);
 
-  const { mutate }=  useUserServiceCalls(session?.user?.id)
 
   const [callState, setCallState] = useState({
     name: '',
@@ -60,7 +58,6 @@ export default function NewCallDialog({ btnProps, dialogProps }: NewCallDialogPr
       priority: '',
       note: '',
     });
-      mutate() // make new call to api to update list 
   };
 
   const nextStep = () => {
@@ -216,7 +213,7 @@ export default function NewCallDialog({ btnProps, dialogProps }: NewCallDialogPr
               <motion.div variants={slideIn} initial="hidden" animate="visible" transition={{ duration: 0.4 }}>
                 <InputWrap
                   label="טלפון ליצירת קשר"
-                  value={callState.phone}
+                  value={ session?.user?.phone ?? callState.phone}
                   onChangeHandler={(e) =>
                     setCallState({ ...callState, phone: e.target.value })
                   }
@@ -225,6 +222,7 @@ export default function NewCallDialog({ btnProps, dialogProps }: NewCallDialogPr
                   fullWidth
                   margin="dense"
                   type="tel"
+                  disabled={!!session?.user?.phone}
                 />
                 {callState.phone.trim().length >= 7 && (
                   <Button onClick={nextStep} sx={{ mt: 2 }}>הבא</Button>

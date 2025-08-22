@@ -1,6 +1,6 @@
-import DesktopSignInPage from "@/desktop_ver/desk_pages_markup/auth/desk_signin";
+import DesktopSignInPage from "@/desktop_ver/desk_pages/auth/desk_signin";
 import { useWindowSize } from "@/context/window_size";
-import MobilSignInPage from "@/mobile_ver/mob_pages_markup/auth/mob_signin";
+import MobilSignInPage from "@/mobile_ver/mob_pages/auth/mob_signin";
 
 export default function SignInPage() {
 

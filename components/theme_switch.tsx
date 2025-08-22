@@ -1,40 +1,48 @@
 import { useThemeContext } from "@/context/theme_context";
-import { Stack, Typography } from "@mui/material";
+import { Stack, StackProps, Typography } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch, { SwitchProps } from "@mui/material/Switch";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeSharpIcon from '@mui/icons-material/LightModeSharp';
 import { blue } from "@mui/material/colors";
+
 type Props = {
-  label: string
+ 
   value: boolean
   onChangeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void
-  SwitchProps?: SwitchProps
+  switchProps?: SwitchProps
+  stackProps?: StackProps
+  
+
 }
 
-const SwitchWrap = ({ label, onChangeHandler, value, SwitchProps }: Props) => {
+const ThemeSwitch : React.FC<Props> = ({  onChangeHandler, value, switchProps , stackProps }: Props) => {
 
   const { isDarkMode  } = useThemeContext()
 
   return (
-    <Stack   direction={'row'} alignItems={'center'} gap={1}   > 
+    <Stack   
+        direction={'row'}
+        alignItems={'center'}
+        {...stackProps}
+        > 
 
     <FormControlLabel
-    sx={{p:0,m:0}}
+     sx={{p:0,m:0}}
       control={
         <Switch
           checked={value}
           onChange={onChangeHandler}
 
-          {...SwitchProps}
+          {...switchProps}
         />
       }
 
       label={<Typography>{}</Typography>}
     />
-       {isDarkMode ? <DarkModeIcon sx={{color:blue[200] }}  /> : <LightModeSharpIcon />}
+       {isDarkMode ? <DarkModeIcon sx={{color:blue[200] }}  /> : <LightModeSharpIcon sx={{color:'black'}}/>}
     </Stack>
   );
 };
 
-export default SwitchWrap
+export default ThemeSwitch

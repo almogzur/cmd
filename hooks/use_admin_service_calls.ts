@@ -7,8 +7,8 @@ const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 export function useAdminServiceCalls() {
 
-  const { data, error, isLoading } = useSWR<ServiceCalls[]>(
-  `/api/service_calls/admin/pull_active_calls` ,
+  const { data, error, isLoading , mutate } = useSWR<ServiceCalls[]>(
+  `/api/admin/service_calls/pull_all_calls` ,
     fetcher
   );
 
@@ -16,5 +16,6 @@ export function useAdminServiceCalls() {
     serviceCalls: data,
     isLoading,
     isError: error,
+    mutate
   };
 }

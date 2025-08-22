@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/context/theme_context"
 import {
   FormControl,
   FormHelperText,
@@ -51,6 +52,8 @@ const SelectWrap = ({
 }: SelectWrapType
 ) => {
 
+  const { textColor } = useThemeContext()
+
   return (
     <FormControl
       fullWidth
@@ -58,8 +61,8 @@ const SelectWrap = ({
       sx={{
         ...formControlSxProps
       }}
-     >
-      
+    >
+
       <InputLabel
         sx={{
           display: "flex",
@@ -69,6 +72,7 @@ const SelectWrap = ({
             color: 'red',
             transform: 'none',
           },
+
           ...labelSxProps
         }}
       >
@@ -85,6 +89,10 @@ const SelectWrap = ({
         sx={{
           // add icon position add option based on top and end title positions
           ".MuiInputBase-input": { textAlign: "start", ...inputStyle },
+          "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: textColor
+        },
+
           ...selectSxProps
         }}
       >
@@ -102,8 +110,8 @@ const SelectWrap = ({
 
       {helpText &&
         <SelectHelpText
-         helpText={helpText} 
-         />
+          helpText={helpText}
+        />
       }
 
     </FormControl>

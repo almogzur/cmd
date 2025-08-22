@@ -1,8 +1,8 @@
 import { useWindowSize } from "@/context/window_size";
-import DesktopTechnicianMainPage from "@/desktop_ver/desk_pages_markup/technician/main";
+import DesktopTechnicianMainPage from "@/desktop_ver/desk_pages/technician/main";
 import DesktopTechniciansLayout from "@/desktop_ver/layout/desk_technicians_layout";
 import MobilTechniciansLayout from "@/mobile_ver/layouts/mob_technicians_layout";
-import MobilTechnicianMainPage from "@/mobile_ver/mob_pages_markup/technicians/main";
+import MobilTechnicianMainPage from "@/mobile_ver/mob_pages/technicians/main";
 
 
 export default function TechniciansMainPage() {
