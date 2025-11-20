@@ -1,6 +1,7 @@
 {
   "name": "cmd",
   "version": "0.1.0",
+  "display": "standalone",
   "private": true,
   "author": {
     "name": "Almog Zur"

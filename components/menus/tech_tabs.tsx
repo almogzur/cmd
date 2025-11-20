@@ -6,12 +6,11 @@ import { SxProps, Tab } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import Tabs from "@mui/material/Tabs"
 import { useState } from "react";
-import DatasetIcon from '@mui/icons-material/Dataset';
-import BiotechIcon from '@mui/icons-material/Biotech';
 
 
-import ServiceRecordsPage from "@/desktop_ver/desk_pages/admin/servicerecords";
-import TechnicianPage from "@/desktop_ver/desk_pages/admin/technician";
+
+
+import DeskTechProfileComponent from "@/desktop_ver/desk_pages/profile"
 
 
 
@@ -69,6 +68,7 @@ const TechDesktopTabs: React.FC = () => {
                 label='ראשי'
                 icon={<Home />}
                 sx={{ ...SelectStyle }}
+                
 
             />
 

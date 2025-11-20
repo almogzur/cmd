@@ -3,27 +3,27 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 
 
-interface DesktopAdminSelectedCallContextType  {
+interface DesktopSelectedCallContextType  {
   call: ServiceCalls | null;
   setCall: (call: ServiceCalls | null) => void;
 }
 
-const DesktopAdminSelectedCallContext = createContext<DesktopAdminSelectedCallContextType | undefined>(undefined);
+const DesktopSelectedCallContext = createContext<DesktopSelectedCallContextType | undefined>(undefined);
 
 
-export function DesktopAdminSelectedCallProvider({ children }: { children: ReactNode }) {
+export function DesktopSelectedCallProvider({ children }: { children: ReactNode }) {
   const [call, setCall] = useState<ServiceCalls | null>(null);
 
   return (
-    <DesktopAdminSelectedCallContext.Provider value={{call, setCall }}>
+    <DesktopSelectedCallContext.Provider value={{call, setCall }}>
       {children}
-    </DesktopAdminSelectedCallContext.Provider>
+    </DesktopSelectedCallContext.Provider>
   );
 }
 
 
-export function useDesktopAdminSelectedCall() {
-  const context = useContext(DesktopAdminSelectedCallContext);
+export function useDesktopSelectedCall() {
+  const context = useContext(DesktopSelectedCallContext);
   if (!context) {
     throw new Error('useDesktopAdminSelectedCall must be used within a DesktopAdminSelectedCallProvider');
   }

@@ -4,14 +4,14 @@ import { authOptions } from "../auth/[...nextauth]";
 import { prisma } from "@/prisma/prisma";
 import { z } from "zod";
 import { ServiceCallStatus, Prisma } from "@prisma/client";
-import { TechnicianNote } from "@/types/service-call";
 import { randomUUID } from "crypto";
+import { TechnicianNote, TechnicianNotesSchema } from "@/runtime_types/main";
 
 // Zod body schema
 const BodySchema = z.object({
   id: z.string().min(1, "id is required"),
   location: z.string().optional(),
-  status: z.nativeEnum(ServiceCallStatus).optional(),
+  status: z.enum(ServiceCallStatus).optional(),
   attachments: z.array(z.string()).optional(),
   newNote: z.string().trim().min(1).optional(), // append as structured note
 }).refine(
@@ -20,22 +20,16 @@ const BodySchema = z.object({
 );
 
 // Type guards
-const isRecord = (v: unknown): v is Record<string, unknown> =>
-  typeof v === "object" && v !== null;
 
-const isTechnicianNote = (v: unknown): v is TechnicianNote =>
-  isRecord(v) &&
-  typeof v.id === "string" &&
-  typeof v.authorId === "string" &&
-  typeof v.authorName === "string" &&
-  typeof v.text === "string" &&
-  typeof v.createdAt === "string";
 
-const parseNotes = (json: Prisma.JsonValue | null): TechnicianNote[] => {
-  const raw = json as unknown;
-  if (!Array.isArray(raw)) return [];
-  return raw.filter(isTechnicianNote);
-};
+export function parseTechnicianNotes(
+  json: Prisma.JsonValue | null | undefined
+): TechnicianNote[] {
+  if (!json) return [];
+  const parsed = TechnicianNotesSchema.safeParse(json);
+  return parsed.success ? parsed.data : [];
+}
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "PATCH") {
@@ -65,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
   if (!current) return res.status(404).json({ error: "Service call not found" });
 
-  const existingNotes = parseNotes(current.technicianNotes);
+  const existingNotes = parseTechnicianNotes(current.technicianNotes);
 
   // Build update input (typed)
   const data: Prisma.ServiceCallsUpdateInput = {};

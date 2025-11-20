@@ -12,7 +12,7 @@ import { MobileAdminComponentProvider } from "@/context/mobile_admin_selected_co
 import { heIL } from "@mui/material/locale"
 import { ThemeContextProvider } from "@/context/theme_context"
 import { DesktopAdminComponentProvider } from "@/context/desktop_admin_selected_component";
-import {DesktopAdminSelectedCallProvider} from "@/context/desktop_admin_selected_call";
+import {DesktopSelectedCallProvider} from "@/context/desktop_admin_selected_call";
 import { DesktopTechComponentProvider } from "@/context/desktop_tech_selected_component";
 
 const theme = createTheme({
@@ -103,7 +103,7 @@ const MyApp = ({
         <WindowSizeProvider>
           <ThemeContextProvider>
             
-            <DesktopAdminSelectedCallProvider>
+            <DesktopSelectedCallProvider>
             <DesktopAdminComponentProvider>
             <DesktopTechComponentProvider>
             <MobileAdminComponentProvider>
@@ -113,7 +113,7 @@ const MyApp = ({
             </MobileAdminComponentProvider>
             </DesktopTechComponentProvider>
             </DesktopAdminComponentProvider>
-            </DesktopAdminSelectedCallProvider>
+            </DesktopSelectedCallProvider>
         
           </ThemeContextProvider>
         </WindowSizeProvider>

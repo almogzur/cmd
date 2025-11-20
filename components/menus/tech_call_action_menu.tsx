@@ -7,12 +7,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useThemeContext } from "@/context/theme_context";
 import TechniciansDropMenu from "../buttons/assign_technician/tech_dropdown_menu";
 import { useSession } from "next-auth/react";
+import { ServiceCallStatus } from "@prisma/client";
 
 
 type Props = {
   btnProps?: ButtonProps
   menuProps?: Omit<MenuProps, 'open' | 'anchorEl'>
   callId: string
+  callStatus: ServiceCallStatus
 }
 
 
@@ -20,6 +22,7 @@ const TechCallActionMenu: React.FC<Props> = ({
   btnProps,
   menuProps,
   callId,
+  
 }) => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -76,6 +79,7 @@ const TechCallActionMenu: React.FC<Props> = ({
           p={1}
 
         >
+
           <TechniciansDropMenu
             btnProps={{ sx: { width: 100, height: 20 }}}
             callId={callId}
@@ -103,6 +107,7 @@ const TechCallActionMenu: React.FC<Props> = ({
               setValue: setAnchorEl
             }}
           />
+        
 
 
         </Stack>

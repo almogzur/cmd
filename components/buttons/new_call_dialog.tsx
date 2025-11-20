@@ -291,12 +291,15 @@ export default function NewCallDialog({ btnProps, dialogProps }: NewCallDialogPr
                     { value: 'high', label: 'גבוהה' },
                     { value: 'critical', label: 'קריטית' },
                   ]}
-                  value={callState.priority}
-                  changeHandler={(e) =>
-                    setCallState({ ...callState, priority: e.target.value })
-                  }
-                  helpText=""
-                  variant="standard"
+                  selectProps={{
+                    value: callState.priority,
+                    onChange: (e) =>
+                      setCallState({ ...callState, priority: e.target.value  as string }),
+                      variant:"standard"
+                  }}
+                  
+                  
+                  
                 />
                 {callState.priority && (
                   <Button onClick={nextStep} sx={{ mt: 2 }}>הבא</Button>

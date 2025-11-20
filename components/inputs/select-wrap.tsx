@@ -18,19 +18,19 @@ export interface SelectItemType {
   label: string
 }
 
-type SelectWrapType = SelectProps & {
+type SelectWrapType =  {
 
   /** Required Items  */
 
   label: string
   items: SelectItemType[]
-  value: string,
-  changeHandler: (event: SelectChangeEvent<string>, child: ReactNode) => void
-  helpText?: string
+
   selectSxProps?: SxProps
   labelSxProps?: SxProps
   formControlSxProps?: SxProps
   inputStyle?: CSSProperties
+  selectProps?: SelectProps
+
 }
 
 interface SelectHelpTextType {
@@ -40,15 +40,13 @@ interface SelectHelpTextType {
 
 const SelectWrap = ({
   items,
-  changeHandler,
   label,
-  variant,
-  value,
-  helpText,
+
   selectSxProps,
   labelSxProps,
   formControlSxProps,
   inputStyle,
+selectProps
 }: SelectWrapType
 ) => {
 
@@ -57,7 +55,7 @@ const SelectWrap = ({
   return (
     <FormControl
       fullWidth
-      variant={variant}
+  
       sx={{
         ...formControlSxProps
       }}
@@ -81,9 +79,9 @@ const SelectWrap = ({
 
       <Select
         labelId={label}
-        value={value ?? ""}
-        onChange={changeHandler}
+
         label={label}
+        {...selectProps}
         // selected item 
 
         sx={{
@@ -108,11 +106,8 @@ const SelectWrap = ({
       </Select>
 
 
-      {helpText &&
-        <SelectHelpText
-          helpText={helpText}
-        />
-      }
+
+      
 
     </FormControl>
   )

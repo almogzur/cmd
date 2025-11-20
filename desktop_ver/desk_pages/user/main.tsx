@@ -1,9 +1,13 @@
+import DesktopUserCallsComponent from "@/desktop_ver/components/user_calls_component";
 
 
 export default function DesktopUserMainPage() {
     return (
-        <div>
-            <h1>User Main Page</h1>
-        </div>
+        <>
+           <DesktopUserCallsComponent
+           
+           
+           />
+        </>
     )
 }

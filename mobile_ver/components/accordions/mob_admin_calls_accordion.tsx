@@ -90,6 +90,7 @@ if(!session) return null
 
           <AccordionDetails sx={{ px: 2.5, py: 1.5 }}>
 
+              
             <CallActionMenu
               btnProps={{
                 sx: { position: 'absolute', top: '50px', left: '0px', color: textColor },
@@ -102,8 +103,6 @@ if(!session) return null
               }}
               callId={call.id}
               callStatus={call.status}
-            
-   
             />
 
             <Stack

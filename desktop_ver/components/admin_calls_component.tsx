@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import DesktopAdminCallsDrawer from "@/desktop_ver/components/admin_drawer";
 import { Box, Button, Chip, List, ListItemButton, SelectChangeEvent, Stack } from "@mui/material";
 import { ServiceCalls, ServiceCallStatus } from "@prisma/client";
 import ColorIndicator from "@/components/color_indicator";
@@ -9,28 +8,30 @@ import { useSession } from "next-auth/react";
 import { useAdminServiceCalls } from "@/hooks/use_admin_service_calls";
 import InputWrap from "@/components/inputs/input-wrap";
 import SelectWrap from "@/components/inputs/select-wrap";
-import { useDesktopAdminSelectedCall } from "@/context/desktop_admin_selected_call";
+import { useDesktopSelectedCall } from "@/context/desktop_admin_selected_call";
 import { useEffect, useRef, useState } from "react";
 import { FormState } from "@/components/buttons/admin_edit_call";
 import { parseTechnicianNotes } from "@/runtime_types/main";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import CloseIcon from "@mui/icons-material/Close";
 import TechniciansDropMenu from "@/components/buttons/assign_technician/tech_dropdown_menu";
 import CloseCallButton from "@/components/buttons/close_call_btn";
 import DeleteCallButton from "@/components/buttons/delete_call_btn";
-import { translateStatusToHebrew } from "@/lib/heb";
 import CallsFilterOptionsMenu from "@/components/menus/calls_filter_options_menu";
+import { translateStatusToHebrew } from "@/lib/heb";
+
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import CloseIcon from "@mui/icons-material/Close";
 import { Settings } from "@mui/icons-material";
+import ReopenCallButton from "@/components/buttons/re_open_call_btn";
+import DesktopCallsDrawer from "@/desktop_ver/components/desktop_calls_drawer";
 
 
-
-const DesktopCallsComponent: React.FC<unknown> = () => {
+const DesktopCallsComponent: React.FC = () => {
 
   const { serviceCalls, isError, isLoading, mutate } = useAdminServiceCalls()
-  const { textColor , bgColor} = useThemeContext()
+  const { textColor, bgColor } = useThemeContext()
   const { data: session } = useSession()
 
-  const { call, setCall } = useDesktopAdminSelectedCall()
+  const { call, setCall } = useDesktopSelectedCall()
 
   const [form, setForm] = useState<FormState>({
     location: call?.location ?? "",
@@ -50,11 +51,11 @@ const DesktopCallsComponent: React.FC<unknown> = () => {
     }
   }, [call]);
 
-// calls filters 
+  // calls filters 
 
-const onlyNewCalls = serviceCalls?.filter(call => call.status === 'NEW')
-const onlyInProgressCalls = serviceCalls?.filter(call => call.status === 'IN_PROGRESS')
-const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
+  const onlyNewCalls = serviceCalls?.filter(call => call.status === 'NEW')
+  const onlyInProgressCalls = serviceCalls?.filter(call => call.status === 'IN_PROGRESS')
+  const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
 
 
 
@@ -116,14 +117,14 @@ const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
 
 
   if (isLoading || !serviceCalls) return <div>Loading...</div>
-  if(!session) return <div>Not logged in</div>
+  if (!session) return <div>Not logged in</div>
 
   if (isError) return <div>Error</div>
 
   return (
     <Stack direction={'row'} >
 
-      <DesktopAdminCallsDrawer>
+      <DesktopCallsDrawer>
 
         <Box display={'flex'} position={"sticky"} top={0} bgcolor={bgColor} zIndex={100}>
 
@@ -148,17 +149,17 @@ const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
           ))}
         </List>
 
-      </DesktopAdminCallsDrawer>
+      </DesktopCallsDrawer>
 
       {call &&
         <Box
           mt={3}
           p={2}
           maxHeight={'80vh'}
-           overflow={'scroll'}
+          overflow={'scroll'}
           sx={{
-                  overflowX: 'hidden',
-          scrollbarWidth: 'none',
+            overflowX: 'hidden',
+            scrollbarWidth: 'none',
             "& .MuiTypography-root": { color: textColor },
             "& .MuiInputBase-root": { color: textColor },
           }}
@@ -199,17 +200,18 @@ const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
 
               {/* editable status */}
               <SelectWrap
-                variant="filled"
                 label="סטטוס"
-                value={form.status}
                 items={[
                   { value: ServiceCallStatus.NEW, label: "חדש" },
                   { value: ServiceCallStatus.IN_PROGRESS, label: "בתהליך" },
                   { value: ServiceCallStatus.PENDING, label: "ממתינה" },
                 ]}
-                changeHandler={(e: SelectChangeEvent<string>) =>
-                  setForm((f) => ({ ...f, status: e.target.value as ServiceCallStatus }))
-                }
+                  selectProps={{ 
+                    onChange: (e) => setForm((f) => ({ ...f, status: e.target.value as ServiceCallStatus })),
+                    variant:'filled',
+                    value: form.status
+                    
+                   }}
               />
 
               {/* notes list + add */}
@@ -250,55 +252,43 @@ const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
               </Stack>
 
               {/* attachments + add files */}
+
               <Stack gap={1}>
-                <InputWrap
-                  variant="filled"
-                  label="קבצים מצורפים (שורה לכל פריט)"
-                  value={attachmentsText()}
-                  onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setForm((f) => ({
-                      ...f,
-                      attachments: e.target.value
-                        .split("\n")
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    }))
-                  }
-                  multiline
-                  minRows={3}
-                />
-
-                <Box display="flex" alignItems="center" gap={1}>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*,application/pdf"
-                    multiple
-                    hidden
-                    onChange={handleFilesSelected}
-                  />
-                  <Button size="small" variant="outlined" startIcon={<UploadFileIcon />} onClick={handlePickFiles}>
-                    הוסף קבצים
-                  </Button>
-                </Box>
-
-                {form.attachments.length > 0 && (
-                  <Box display="flex" gap={1} flexWrap="wrap" mt={1}>
-                    {form.attachments.map((att, idx) => (
-                      <Chip
-                        key={`${att}-${idx}`}
-                        label={att}
-                        onDelete={() => removeAttachment(idx)}
-                        deleteIcon={<CloseIcon />}
-                        variant="outlined"
-                        size="small"
-                      />
-                    ))}
+                {call.status !== 'DONE' &&
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*,application/pdf"
+                      multiple
+                      hidden
+                      onChange={handleFilesSelected}
+                    />
+                    <Button size="small" variant="contained" startIcon={<UploadFileIcon />} onClick={handlePickFiles}>
+                      הוסף קבצים
+                    </Button>
                   </Box>
-                )}
+                }
+
+
+                <Box display="flex" gap={1} flexWrap="wrap" mt={1}>
+                  {form.attachments.map((att, idx) => (
+                    <Chip
+                      key={`${att}-${idx}`}
+                      label={att}
+                      onDelete={() => removeAttachment(idx)}
+                      deleteIcon={<CloseIcon />}
+                      variant="outlined"
+                      size="small"
+                    />
+                  ))}
+                </Box>
 
 
               </Stack>
+
+              {call.closerName && <InputWrap label='נסגר ע״י' value={call.closerName} variant="filled" />}
+
 
               {/* actions */}
               <Stack
@@ -309,29 +299,36 @@ const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
                 p={1}
 
               >
+                {call.status !== ServiceCallStatus.DONE &&
+                  <>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                    >
+                      עדכן
+                    </Button>
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                >
-                  עדכן
-                </Button>
 
+                    <TechniciansDropMenu
+                      callId={call.id}
+                      btnText="שייך"
 
-                <TechniciansDropMenu
-                  callId={call.id}
-                  btnText="שייך"
+                    />
 
-                />
+                    <CloseCallButton
+                      callId={call.id}
 
-                <CloseCallButton
-                  callId={call.id}
+                    />
 
-                />
+                    <DeleteCallButton
+                      callId={call.id}
+                    />
+                  </>
+                }
 
-                <DeleteCallButton
-                  callId={call.id}
-                />
+                {call.status === ServiceCallStatus.DONE &&
+                  <ReopenCallButton callId={call.id} />
+                }
 
 
 
@@ -355,10 +352,10 @@ const onlyClosedCalls = serviceCalls?.filter(call => call.status === 'DONE')
 }
 
 
-const CallItemSummary: React.FC<{ serviceCall: ServiceCalls, index: number }> = ({ serviceCall, index }) => {
+export const CallItemSummary: React.FC<{ serviceCall: ServiceCalls, index: number }> = ({ serviceCall, index }) => {
 
   const { textColor } = useThemeContext()
-  const { call, setCall } = useDesktopAdminSelectedCall()
+  const { call, setCall } = useDesktopSelectedCall()
   const fmt = (d?: Date | string | null) => (d ? new Date(d).toLocaleDateString() : "");
 
 

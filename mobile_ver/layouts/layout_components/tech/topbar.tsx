@@ -8,23 +8,26 @@ import NewCallDialog from '@/components/buttons/new_call_dialog';
 import { signOut } from 'next-auth/react';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
-const TechnicianTopNavbar : React.FC = () => {
+const TechnicianTopNavbar: React.FC = () => {
 
-      const {isDarkMode, toggleTheme , bgColor , textColor} = useThemeContext();
+  const { isDarkMode, toggleTheme, bgColor, textColor } = useThemeContext();
 
-    return (
-            <AppBar
+  return (
+    <AppBar
       sx={{
         direction: 'rtl',
-        position: 'inherit',
+
         width: '100%',
         backgroundColor: bgColor,
-       
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000
+
       }}
     >
 
       <Stack
-        direction={'row' }
+        direction={'row'}
         alignItems={'center'}
         justifyContent={'space-between'}
         spacing={1}
@@ -35,12 +38,12 @@ const TechnicianTopNavbar : React.FC = () => {
           alignItems={'center'}
           justifyContent={'space-around'}
           gap={1}
- 
+
         >
 
           <Link href={'/'}>
             <Image
-              src={ isDarkMode ?  '/light_logo.png' : '/dark_logo.png' }
+              src={isDarkMode ? '/light_logo.png' : '/dark_logo.png'}
               width={60}
               height={60}
               alt={''}
@@ -48,7 +51,7 @@ const TechnicianTopNavbar : React.FC = () => {
           </Link>
 
           <Typography
-          variant='body2'
+            variant='body2'
             sx={{ flexGrow: 1, fontWeight: 600, color: textColor }}
           >
             רשומות  פעילות
@@ -66,22 +69,22 @@ const TechnicianTopNavbar : React.FC = () => {
 
 
 
-        <ThemeSwitch
+          <ThemeSwitch
             value={isDarkMode}
             onChangeHandler={() => { toggleTheme() }}
             switchProps={{
-              size:  'small',
-               color:'info'
-            }}
-          />
-     
-          <NewCallDialog
-            btnProps={{
-              size:  'small',
+              size: 'small',
+              color: 'info'
             }}
           />
 
-          
+          <NewCallDialog
+            btnProps={{
+              size: 'small',
+            }}
+          />
+
+
           <PowerSettingsNewIcon
             style={{ color: 'red', cursor: 'pointer', scale: 1.5 }}
             onClick={() => {
@@ -96,7 +99,7 @@ const TechnicianTopNavbar : React.FC = () => {
       </Stack>
 
     </AppBar>
-    )
+  )
 }
 
 export default TechnicianTopNavbar

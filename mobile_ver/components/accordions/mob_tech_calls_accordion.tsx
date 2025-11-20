@@ -32,140 +32,143 @@ const MobTechCallsAccordion: React.FC<AccordionComponentProps> = ({ calls }) => 
     const { textColor, bgColor, isDarkMode } = useThemeContext();
 
 
-return (
-    <Stack>
-        {calls?.map((item) => (
-            <Accordion
-                key={item.id}
-                disableGutters
-                elevation={0}
-                sx={{
-                    borderRadius: 4,
-                    backgroundColor: bgColor,
-                    boxShadow: `0px 1px 4px ${DotColor(item.priority)}${isDarkMode ? 15 : 96}`,
-                }}
-            >
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{ color: textColor }} />}
-                    aria-controls={`panel-${item.id}-content`}
-                    id={`panel-${item.id}-header`}
+    return (
+        <Stack>
+            {calls?.map((call) => (
+                <Accordion
+                    key={call.id}
+                    disableGutters
+                    elevation={0}
                     sx={{
-                        minHeight: 36,
-                        px: 2,
-                        py: 1,
-                        '& .MuiAccordionSummary-content': { marginY: 0.5 },
-                        '&.Mui-expanded': {
-                            bgcolor: DotColor(item.priority),
-                            borderRadius: 3,
-                            opacity: 0.8,
-                        },
+                        borderRadius: 4,
+                        backgroundColor: bgColor,
+                        boxShadow: `0px 1px 4px ${DotColor(call.priority)}${isDarkMode ? 15 : 96}`,
                     }}
                 >
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        gap={1}
-                        alignItems="center"
-                        sx={{ '& .MuiTypography-root': { color: textColor } }}
-                    >
-                        <ColorIndicator color={DotColor(item.priority)} />
-
-                        <Typography fontSize="0.95rem" fontWeight={500}>
-                            {item.customerName} - {item.description} {translateStatusToHebrew(item.status)}
-                        </Typography>
-
-                    </Stack>
-                </AccordionSummary>
-
-                <AccordionDetails sx={{ px: 2.5, py: 1.5 }}>
-
-                    <TechCallActionMenu
-                        btnProps={{
-                            sx: { position: 'absolute', top: '50px', left: '0px', color: textColor },
-                        }}
-                        menuProps={{
-                            slotProps: {
-                                paper: { sx: { backgroundColor: bgColor } },
-
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon sx={{ color: textColor }} />}
+                        aria-controls={`panel-${call.id}-content`}
+                        id={`panel-${call.id}-header`}
+                        sx={{
+                            minHeight: 36,
+                            px: 2,
+                            py: 1,
+                            '& .MuiAccordionSummary-content': { marginY: 0.5 },
+                            '&.Mui-expanded': {
+                                bgcolor: DotColor(call.priority),
+                                borderRadius: 3,
+                                opacity: 0.8,
                             },
                         }}
-                        callId={item.id}
-                    />
-
-                    <Stack
-                        spacing={0.5}
-                        sx={{ '& .MuiTypography-root': { color: textColor } }}
                     >
-                        <Typography fontSize="0.9rem"><strong>תיאור:</strong> {item.description}</Typography>
-                        <Typography fontSize="0.9rem"><strong>לקוח:</strong> {item.customerName}</Typography>
-                        <Typography fontSize="0.9rem"><strong>מיקום:</strong> {item.location}</Typography>
-                        <Typography fontSize="0.9rem"><strong>סטטוס:</strong> {translateStatusToHebrew(item.status)}</Typography>
-                        <Typography fontSize="0.9rem"><strong>עדיפות:</strong> {translatePriorityToHebrew(item.priority)}</Typography>
-                        <Typography fontSize="0.9rem"><strong>תאריך יצירה:</strong> {new Date(item.createdAt).toLocaleString()}</Typography>
+                        <Stack
+                            direction="row"
+                            spacing={1}
+                            gap={1}
+                            alignItems="center"
+                            sx={{ '& .MuiTypography-root': { color: textColor } }}
+                        >
+                            <ColorIndicator color={DotColor(call.priority)} />
 
-                        <Typography>הערות טכנאי : </Typography>
-                        {parseTechnicianNotes(item.technicianNotes).length && (
-                            <>
-                                {parseTechnicianNotes(item.technicianNotes).map((note) => (
-                                    <Typography key={note.id}>
-                                        תאריך: {new Date(note.createdAt).toLocaleDateString()} -
-                                        {note.text} -
-                                        {note.authorName}
-                                    </Typography>
+                            <Typography fontSize="0.95rem" fontWeight={500}>
+                                {call.customerName} - {call.description} {translateStatusToHebrew(call.status)}
+                            </Typography>
 
-                                ))}
-                            </>
-                        )
+                        </Stack>
+                    </AccordionSummary>
+
+                    <AccordionDetails sx={{ px: 2.5, py: 1.5 }}>
+
+                        {call.status !== 'DONE' &&
+                            <TechCallActionMenu
+                                btnProps={{
+                                    sx: { position: 'absolute', top: '50px', left: '0px', color: textColor },
+                                }}
+                                menuProps={{
+                                    slotProps: {
+                                        paper: { sx: { backgroundColor: bgColor } },
+
+                                    },
+                                }}
+                                callId={call.id}
+                                callStatus={call.status}
+                            />
                         }
 
+                        <Stack
+                            spacing={0.5}
+                            sx={{ '& .MuiTypography-root': { color: textColor } }}
+                        >
+                            <Typography fontSize="0.9rem"><strong>תיאור:</strong> {call.description}</Typography>
+                            <Typography fontSize="0.9rem"><strong>לקוח:</strong> {call.customerName}</Typography>
+                            <Typography fontSize="0.9rem"><strong>מיקום:</strong> {call.location}</Typography>
+                            <Typography fontSize="0.9rem"><strong>סטטוס:</strong> {translateStatusToHebrew(call.status)}</Typography>
+                            <Typography fontSize="0.9rem"><strong>עדיפות:</strong> {translatePriorityToHebrew(call.priority)}</Typography>
+                            <Typography fontSize="0.9rem"><strong>תאריך יצירה:</strong> {new Date(call.createdAt).toLocaleString()}</Typography>
 
-                        {item.updatedAt && (
-                            <Typography fontSize="0.9rem">
-                                <strong>עודכן בתאריך:</strong> {new Date(item.updatedAt).toLocaleString()}
-                            </Typography>
-                        )}
+                            <Typography>הערות טכנאי : </Typography>
+                            {parseTechnicianNotes(call.technicianNotes).length && (
+                                <>
+                                    {parseTechnicianNotes(call.technicianNotes).map((note) => (
+                                        <Typography key={note.id}>
+                                            תאריך: {new Date(note.createdAt).toLocaleDateString()} -
+                                            {note.text} -
+                                            {note.authorName}
+                                        </Typography>
 
-                        {/* Technician block (shows only what exists) */}
-                        {(item.technicianName || item.technicianEmail || item.technicianId
-                        ) && (
-                                <Box mt={0.5}>
-
-                                    {item.technicianName && (
-                                        <Typography fontSize="0.9rem"><strong>שם מטפל:</strong> {item.technicianName}</Typography>
-                                    )}
-                                    {item.technicianEmail && (
-                                        <Typography fontSize="0.9rem"><strong>אימייל מטפל:</strong> {item.technicianEmail}</Typography>
-                                    )}
+                                    ))}
+                                </>
+                            )
+                            }
 
 
+                            {call.updatedAt && (
+                                <Typography fontSize="0.9rem">
+                                    <strong>עודכן בתאריך:</strong> {new Date(call.updatedAt).toLocaleString()}
+                                </Typography>
+                            )}
+
+                            {/* Technician block (shows only what exists) */}
+                            {(call.technicianName || call.technicianEmail || call.technicianId
+                            ) && (
+                                    <Box mt={0.5}>
+
+                                        {call.technicianName && (
+                                            <Typography fontSize="0.9rem"><strong>שם מטפל:</strong> {call.technicianName}</Typography>
+                                        )}
+                                        {call.technicianEmail && (
+                                            <Typography fontSize="0.9rem"><strong>אימייל מטפל:</strong> {call.technicianEmail}</Typography>
+                                        )}
+
+
+                                    </Box>
+                                )}
+
+                            {/* Creator / user and asset info */}
+
+                            {call.assetSn && (
+                                <Typography fontSize="0.9rem"><strong>מס׳ סידורי נכס:</strong> {call.assetSn}</Typography>
+                            )}
+
+                            {call.attachments?.length > 0 && (
+                                <Box>
+                                    <Typography fontSize="0.9rem"><strong>קבצים:</strong></Typography>
+                                    <Stack direction="row" spacing={1} flexWrap="wrap" mt={0.5}>
+                                        {call.attachments.map((file, idx) => (
+                                            <Chip key={idx} label={file} variant="outlined" size="small" />
+                                        ))}
+                                    </Stack>
                                 </Box>
                             )}
 
-                        {/* Creator / user and asset info */}
+                        </Stack>
 
-                        {item.assetSn && (
-                            <Typography fontSize="0.9rem"><strong>מס׳ סידורי נכס:</strong> {item.assetSn}</Typography>
-                        )}
+                    </AccordionDetails>
 
-                        {item.attachments?.length > 0 && (
-                            <Box>
-                                <Typography fontSize="0.9rem"><strong>קבצים:</strong></Typography>
-                                <Stack direction="row" spacing={1} flexWrap="wrap" mt={0.5}>
-                                    {item.attachments.map((file, idx) => (
-                                        <Chip key={idx} label={file} variant="outlined" size="small" />
-                                    ))}
-                                </Stack>
-                            </Box>
-                        )}
-
-                    </Stack>
-
-                </AccordionDetails>
-
-            </Accordion>
-        ))}
-    </Stack>
-)
+                </Accordion>
+            ))}
+        </Stack>
+    )
 }
 
 

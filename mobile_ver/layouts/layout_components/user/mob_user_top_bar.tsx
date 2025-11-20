@@ -22,9 +22,12 @@ const UserTopNavbar: React.FC = () => {
     <AppBar
       sx={{
         direction: 'rtl',
-        position: 'inherit',
         width: '100%',
         backgroundColor: bgColor,
+        position: 'sticky',
+        top: 0,
+        zIndex:1000
+        
        
       }}
     >

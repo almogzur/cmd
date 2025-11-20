@@ -15,11 +15,7 @@ import ColorIndicator from '@/components/color_indicator';
 import { DotColor } from '@/lib/constants';
 import { useThemeContext } from '@/context/theme_context';
 
-import CloseCallButton from '@/components/buttons/close_call_btn';
-import EditCallButton from '@/components/buttons/admin_edit_call';
 import UserEditCallBtn from '@/components/buttons/user_edit_call';
-
-
 
 
 type AccordionComponentProps = {

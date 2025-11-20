@@ -10,7 +10,7 @@ import { useThemeContext } from "@/context/theme_context"
 export default function CallTablePage() {
 
     const { serviceCalls, isError, isLoading } = useAdminServiceCalls()
-    const { textColor, } = useThemeContext()
+    const { textColor, bgColor } = useThemeContext()
 
 
     if (isLoading || isError || !serviceCalls) return <div>Loading...</div>
@@ -24,6 +24,10 @@ export default function CallTablePage() {
                 justifyContent="space-between"
                 mb={1}
                 px={1}
+                position={'sticky'}
+                top={50}
+                zIndex={1000}
+                bgcolor={bgColor}
 
             >
 

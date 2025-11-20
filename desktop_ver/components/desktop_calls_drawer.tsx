@@ -8,7 +8,7 @@ type Props = {
     children?: React.ReactNode
 }
 
-const DesktopAdminCallsDrawer : React.FC<Props> = ({children})=> {
+const DesktopCallsDrawer : React.FC<Props> = ({children})=> {
 
     const { bgColor} = useThemeContext()
 
@@ -29,4 +29,4 @@ const DesktopAdminCallsDrawer : React.FC<Props> = ({children})=> {
   );
 }
 
-export  default DesktopAdminCallsDrawer
+export  default DesktopCallsDrawer
